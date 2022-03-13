@@ -28,7 +28,8 @@ public:
 	void		WriteBits(uint8_t inData, uint32_t inBitCount);
 	void		WriteBits(const void* inData, uint32_t inBitCount);
 	void Write(const Vector3& inVector);
-	
+	void Write(const char* inData);
+
 
 	const 	char*	GetBufferPtr()		const { return mBuffer; }
 	uint32_t		GetBitLength()		const { return mBitHead; }
@@ -69,6 +70,18 @@ public:
 		for (const T& element : inVector)
 		{
 			Write(element);
+		}
+	}
+
+	template< typename T >
+	void Write(const std::vector<T>& inVector, uint32_t inBitCountPerElement)
+	{
+		uint32_t elementCount = inVector.size();
+		Write(elementCount);
+		Write(inBitCountPerElement);
+		for (const T& element : inVector)
+		{
+			Write(element, inBitCountPerElement);
 		}
 	}
 
@@ -143,6 +156,19 @@ public:
 		}
 	}
 
+	template< typename T >
+	void Read(std::vector< T >& outVector, uint32_t inBitCountPerElement)
+	{
+		size_t elementCount;
+		Read(elementCount);
+		Read(inBitCountPerElement);
+		outVector.resize(elementCount);
+		for (T& element : outVector)
+		{
+			Read(element, inBitCountPerElement);
+		}
+	}
+
 	void		Read(uint32_t& outData, uint32_t inBitCount = 32) { ReadBits(&outData, inBitCount); }
 	void		Read(int& outData, uint32_t inBitCount = 32) { ReadBits(&outData, inBitCount); }
 	void		Read(float& outData) { ReadBits(&outData, 32); }
@@ -169,6 +195,7 @@ public:
 		}
 	}
 
+	void Read(char* inData);
 	void Read(Vector3& inVector);
 
 	void ReadPos(Vector3& inVector);

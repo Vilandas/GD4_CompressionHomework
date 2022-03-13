@@ -127,9 +127,11 @@ void Client::ByteSwapTest()
 void Client::SendPlayerOutputByteStream(UDPSocketPtr client_socket, const Player* player)
 {
 	SocketAddress server_address = SocketAddress(ConvertIPToInt("127.0.0.1"), 50005);
-	OutputMemoryStream out_stream;
+	OutputMemoryBitStream out_stream;
 	player->Write(out_stream);
-	int bytes_sent = client_socket->SendTo(out_stream.GetBufferPtr(), out_stream.GetLength(), server_address);
-	std::cout << "Sent: " << bytes_sent << std::endl;
+	int bytes_sent = client_socket->SendTo(out_stream.GetBufferPtr(), out_stream.GetByteLength(), server_address);
+	int bits_sent = client_socket->SendTo(out_stream.GetBufferPtr(), out_stream.GetBitLength(), server_address);
+	std::cout << "Sent Bytes: " << bytes_sent << std::endl;
+	std::cout << "Sent Bits: " << bits_sent << std::endl;
 }
 

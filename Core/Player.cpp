@@ -11,24 +11,27 @@ uint32_t Player::GetAmmo() const
 	return m_ammo;
 }
 
-void Player::Write(OutputMemoryStream& out_stream) const
+void Player::Write(OutputMemoryBitStream& out_stream) const
 {
-	out_stream.Write(m_health);
-	out_stream.Write(m_ammo);
-	out_stream.Write(m_name, 128);
-	out_stream.Write(m_position);
-	out_stream.Write(m_rotation);
-	out_stream.Write(m_weapons);
+	out_stream.Write(m_health, 4); //1010 = 10					(4 bits)
+	out_stream.Write(m_ammo, 2); //11 = 3						(2 bits)
+	out_stream.Write(m_name); //											(64 bits {"Default" + '\0'})
+	out_stream.Write(m_position); //limit? game dependent					(96 bits)
+	out_stream.Write(m_rotation); //										(49 bits)
+	out_stream.Write(m_weapons, 7); //biggest == 100			(5 * 7)	(99 bits {32 size, 32 bitsPerElement, 35 bitsFromElements})
+
+	//																		(314 bits TOTAL -> 40 bytes)
+	//																		(320 bits nearest byte)
 }
 
-void Player::Read(InputMemoryStream& in_stream)
+void Player::Read(InputMemoryBitStream& in_stream)
 {
-	in_stream.Read(m_health);
-	in_stream.Read(m_ammo);
-	in_stream.Read(m_name, 128);
+	in_stream.Read(m_health, 4);
+	in_stream.Read(m_ammo, 2);
+	in_stream.Read(m_name);
 	in_stream.Read(m_position);
 	in_stream.Read(m_rotation);
-	in_stream.Read(m_weapons);
+	in_stream.Read(m_weapons, 7);
 }
 
 void Player::toString() const

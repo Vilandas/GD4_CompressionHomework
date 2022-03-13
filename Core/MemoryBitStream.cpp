@@ -58,6 +58,18 @@ void OutputMemoryBitStream::Write(const Vector3& inVector)
 	Write(inVector.mZ);
 }
 
+void OutputMemoryBitStream::Write(const char* inData)
+{
+	int i = 0;
+	while (inData[i] != '\0')
+	{
+		Write(inData[i]);
+		i++;
+	}
+
+	Write(inData[i + 1]);
+}
+
 void OutputMemoryBitStream::WritePos(const Vector3& inVector)
 {
 	Write(inVector.mX);
@@ -71,6 +83,18 @@ void OutputMemoryBitStream::WritePos(const Vector3& inVector)
 		Write(false);
 		Write(inVector.mY);
 	}
+}
+
+void InputMemoryBitStream::Read(char* inData)
+{
+	int i = 0;
+	while (inData[i] != '\0')
+	{
+		Read(inData[i]);
+		i++;
+	}
+
+	Read(inData[i + 1]);
 }
 
 void InputMemoryBitStream::Read(Vector3& outVector)
