@@ -133,5 +133,12 @@ void Client::SendPlayerOutputByteStream(UDPSocketPtr client_socket, const Player
 	int bits_sent = client_socket->SendTo(out_stream.GetBufferPtr(), out_stream.GetBitLength(), server_address);
 	std::cout << "Sent Bytes: " << bytes_sent << std::endl;
 	std::cout << "Sent Bits: " << bits_sent << std::endl;
+
+	char* buffer = const_cast<char*>(out_stream.GetBufferPtr());
+	InputMemoryBitStream in_stream(buffer, out_stream.GetBitLength());
+
+	Player* readPlayer = new Player();
+	readPlayer->Read(in_stream);
+	readPlayer->toString();
 }
 

@@ -3,12 +3,16 @@ class GameObject;
 
 inline uint32_t ConvertToFixed(float inNumber, float inMin, float inPrecision)
 {
-	return static_cast<int> ((inNumber - inMin) / inPrecision);
+	return inNumber != 0
+		? static_cast<int> ((inNumber - inMin) / inPrecision)
+		: 0;
 }
 
 inline float ConvertFromFixed(uint32_t inNumber, float inMin, float inPrecision)
 {
-	return static_cast<float>(inNumber) * inPrecision + inMin;
+	return inNumber != 0
+		? static_cast<float>(inNumber) * inPrecision + inMin
+		: 0;
 }
 
 
@@ -74,10 +78,10 @@ public:
 	}
 
 	template< typename T >
-	void Write(const std::vector<T>& inVector, uint32_t inBitCountPerElement, uint32_t maxVectorBitSize = 32)
+	void Write(const std::vector<T>& inVector, uint32_t inBitCountPerElement, uint32_t maxVectorSizeInBits = 32)
 	{
 		uint32_t elementCount = inVector.size();
-		Write(elementCount, maxVectorBitSize);
+		Write(elementCount, maxVectorSizeInBits);
 		Write(inBitCountPerElement, 6);	//should never be more than 6 bits of size
 		for (const T& element : inVector)
 		{
@@ -157,10 +161,10 @@ public:
 	}
 
 	template< typename T >
-	void Read(std::vector< T >& outVector, uint32_t inBitCountPerElement, uint32_t maxVectorBitSize = 32)
+	void Read(std::vector< T >& outVector, uint32_t inBitCountPerElement, uint32_t maxVectorSizeInBits = 32)
 	{
-		size_t elementCount;
-		Read(elementCount, maxVectorBitSize);
+		size_t elementCount = 0;
+		Read(elementCount, maxVectorSizeInBits);
 		Read(inBitCountPerElement, 6);
 		outVector.resize(elementCount);
 		for (T& element : outVector)
