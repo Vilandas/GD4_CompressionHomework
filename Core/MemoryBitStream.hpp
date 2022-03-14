@@ -74,11 +74,11 @@ public:
 	}
 
 	template< typename T >
-	void Write(const std::vector<T>& inVector, uint32_t inBitCountPerElement)
+	void Write(const std::vector<T>& inVector, uint32_t inBitCountPerElement, uint32_t maxVectorBitSize = 32)
 	{
 		uint32_t elementCount = inVector.size();
-		Write(elementCount);
-		Write(inBitCountPerElement);
+		Write(elementCount, maxVectorBitSize);
+		Write(inBitCountPerElement, 6);	//should never be more than 6 bits of size
 		for (const T& element : inVector)
 		{
 			Write(element, inBitCountPerElement);
@@ -157,11 +157,11 @@ public:
 	}
 
 	template< typename T >
-	void Read(std::vector< T >& outVector, uint32_t inBitCountPerElement)
+	void Read(std::vector< T >& outVector, uint32_t inBitCountPerElement, uint32_t maxVectorBitSize = 32)
 	{
 		size_t elementCount;
-		Read(elementCount);
-		Read(inBitCountPerElement);
+		Read(elementCount, maxVectorBitSize);
+		Read(inBitCountPerElement, 6);
 		outVector.resize(elementCount);
 		for (T& element : outVector)
 		{
