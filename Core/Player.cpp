@@ -13,15 +13,15 @@ uint32_t Player::GetAmmo() const
 
 void Player::Write(OutputMemoryBitStream& out_stream) const
 {
-	out_stream.Write(m_health, 4); //1010 = 10					(4 bits)
-	out_stream.Write(m_ammo, 2); //11 = 3						(2 bits)
-	out_stream.Write(m_name); //											(64 bits {"Default" + '\0'})
-	out_stream.Write(m_position); //limit? game dependent					(96 bits)
-	out_stream.Write(m_rotation); //										(49 bits)
-	out_stream.Write(m_weapons, 7); //biggest == 100			(5 * 7)	(99 bits {32 size, 32 bitsPerElement, 35 bitsFromElements})
+	out_stream.Write(m_health, 4); //1010 = 10				(4 bits)
+	out_stream.Write(m_ammo, 2); //11 = 3					(2 bits)
+	out_stream.Write(m_name); //							(64 bits {"Default" + '\0'})
+	out_stream.Write(m_position); //limit? game dependent	(96 bits)
+	out_stream.Write(m_rotation); //						(49 bits)
+	out_stream.Write(m_weapons, 7); //biggest == 100		(5 * 7)	(99 bits {32 size, 32 bitsPerElement, 35 bitsFromElements})
 
-	//																		(314 bits TOTAL -> 40 bytes)
-	//																		(320 bits nearest byte)
+	//														(314 bits TOTAL -> 40 bytes)
+	//														(320 bits nearest byte)
 }
 
 void Player::Read(InputMemoryBitStream& in_stream)

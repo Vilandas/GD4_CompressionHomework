@@ -67,7 +67,7 @@ void OutputMemoryBitStream::Write(const char* inData)
 		i++;
 	}
 
-	Write(inData[i + 1]);
+	Write(inData[i]);
 }
 
 void OutputMemoryBitStream::WritePos(const Vector3& inVector)
@@ -94,7 +94,7 @@ void InputMemoryBitStream::Read(char* inData)
 		i++;
 	}
 
-	Read(inData[i + 1]);
+	Read(inData[i]);
 }
 
 void InputMemoryBitStream::Read(Vector3& outVector)
